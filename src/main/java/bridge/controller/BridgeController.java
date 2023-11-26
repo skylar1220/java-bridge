@@ -42,7 +42,7 @@ public class BridgeController {
     }
 
     private void playRound(BridgeGame bridgeGame) {
-        while (bridgeGame.hasRightMovement()) {
+        while (bridgeGame.hasRightMovement() && bridgeGame.canPlayGame()) {
             Position inpuPosition = readWithRetry(inputView::readMoving);
             bridgeGame.move(inpuPosition);
             outputView.printMap(bridgeGame);
