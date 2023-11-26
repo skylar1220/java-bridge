@@ -5,12 +5,27 @@ package bridge.domain;
  */
 public class BridgeGame {
 
+    private final AnswerBridge answerBridge;
+    private final PlayerBridge playerBridge;
+
+    public BridgeGame(AnswerBridge answerBridge, PlayerBridge playerBridge) {
+        this.answerBridge = answerBridge;
+        this.playerBridge = playerBridge;
+    }
+
+    public static BridgeGame initGame(AnswerBridge answerBridge) {
+        PlayerBridge playerBridge = PlayerBridge.init();
+        return new BridgeGame(answerBridge, playerBridge);
+    }
+
     /**
      * 사용자가 칸을 이동할 때 사용하는 메서드
      * <p>
      * 이동을 위해 필요한 메서드의 반환 타입(return type), 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
      */
-    public void move() {
+    public void move(Position inpuPosition) {
+        playerBridge.applyMovement(answerBridge, inpuPosition);
+//        playerBridge.move(inpuPosition);
     }
 
     /**
@@ -19,5 +34,25 @@ public class BridgeGame {
      * 재시작을 위해 필요한 메서드의 반환 타입(return type), 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
      */
     public void retry() {
+    }
+
+    public boolean hasRightMovement() {
+        if (playerBridge.isStart()) {
+            return true;
+        }
+        return !playerBridge.hasFailMovement(answerBridge);
+    }
+
+    public boolean canPlayGame() {
+        return !playerBridge.isSameSize(answerBridge);
+    }
+
+    public GameSuccess getSuccessResult() {
+        boolean finalSuccess = !playerBridge.hasFailMovement(answerBridge);
+        return GameSuccess.from(finalSuccess);
+    }
+
+    public PlayerBridge getPlayerBridge() {
+        return playerBridge;
     }
 }

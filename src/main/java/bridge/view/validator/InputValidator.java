@@ -20,4 +20,12 @@ public class InputValidator {
         StringValidator.validateNumeric(template, target);
         StringValidator.validateIntegerRange(template, target);
     }
+
+    public void validateMoving(String moving, String target) {
+        StringValidator.validateBlank(moving, target);
+    }
+
+    public void validateRetryOption(String retry, String target) {
+        StringValidator.validateBlank(retry, target);
+    }
 }
