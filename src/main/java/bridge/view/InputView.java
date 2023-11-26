@@ -1,6 +1,10 @@
 package bridge.view;
 
-import mission.domain.Template;
+import bridge.domain.BridegeSize;
+import bridge.util.converter.Converter;
+import bridge.view.printer.Printer;
+import bridge.view.reader.Reader;
+import bridge.view.validator.InputValidator;
 
 public class InputView {
     private final Reader reader;
@@ -17,10 +21,18 @@ public class InputView {
         return new InputView(reader, printer, InputValidator.getInstance());
     }
 
-    public Template inputTemplate() {
-        printer.printLine("");
-        String template = reader.readLine();
-        validator.validateTemplate(template, "템플릿");
-        return new Template();
+    public BridegeSize readBridgeSize() {
+        printer.printLine("다리의 길이를 입력해주세요.");
+        String bridegeSize = reader.readLine();
+        validator.validateBridegeSize(bridegeSize, "다리 길이");
+        return new BridegeSize(Converter.convertToInt(bridegeSize));
+    }
+
+    public String readMoving() {
+        return null;
+    }
+
+    public String readGameCommand() {
+        return null;
     }
 }

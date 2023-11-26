@@ -1,9 +1,8 @@
 package bridge.view.validator;
 
-import mission.common.Symbol;
+import bridge.util.validator.StringValidator;
 
 public class InputValidator {
-    public static final String TEMPLATE_SEPARATOR = Symbol.COMMA;
     private static InputValidator inputValidator;
 
     private InputValidator() {
@@ -16,7 +15,7 @@ public class InputValidator {
         return inputValidator;
     }
 
-    public void validateTemplate(String template, String target) {
+    public void validateBridegeSize(String template, String target) {
         StringValidator.validateBlank(template, target);
         StringValidator.validateNumeric(template, target);
         StringValidator.validateIntegerRange(template, target);

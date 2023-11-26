@@ -1,5 +1,5 @@
 package bridge.view.formatter;
 
 public class OutputFomatter {
-    public static final String WINNERS_SEPARATOR = Symbol.COMMA;
+//    public static final String WINNERS_SEPARATOR = Symbol.COMMA;
 }
