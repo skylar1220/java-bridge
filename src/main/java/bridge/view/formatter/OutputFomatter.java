@@ -5,8 +5,8 @@ import bridge.domain.GameSuccess;
 import bridge.domain.MovingResult;
 import bridge.domain.PlayerBridge;
 import bridge.domain.Position;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class OutputFomatter {
     public static final String BLANK = " ";
@@ -15,20 +15,33 @@ public class OutputFomatter {
         PlayerBridge playerBridge = bridgeGame.getPlayerBridge();
         List<MovingResult> movingResults = playerBridge.getBridge();
 
-        List<String> upline = getPositionMatches(movingResults, Position.UP);
-        List<String> downline = getPositionMatches(movingResults, Position.DOWN);
+        List<String> upline = new ArrayList<>();
+        List<String> downline = new ArrayList<>();
 
-        return convertResultMap(upline, downline);
+        addMarkToLine(movingResults, upline, downline);
+        return convertToResultMap(upline, downline);
     }
 
-    private List<String> getPositionMatches(List<MovingResult> movingResults, Position position) {
-        return movingResults.stream()
-                .filter(movingResult -> movingResult.getPosition() == position)
-                .map(movingResult -> movingResult.getPositionMatch().getMark())
-                .collect(Collectors.toList());
+    private void addMarkToLine(List<MovingResult> movingResults, List<String> upline, List<String> downline) {
+        for (MovingResult movingResult : movingResults) {
+            Position position = movingResult.getPosition();
+            String positionMatchMark = movingResult.getPositionMatch().getMark();
+
+            addToLine(position, positionMatchMark, upline, downline);
+        }
     }
 
-    private String convertResultMap(List<String> upline, List<String> downline) {
+    private void addToLine(Position position, String positionMatchMark, List<String> upline, List<String> downline) {
+        if (position.equals(Position.UP)) {
+            upline.add(positionMatchMark);
+            downline.add(BLANK);
+        } else if (position.equals(Position.DOWN)) {
+            upline.add(BLANK);
+            downline.add(positionMatchMark);
+        }
+    }
+
+    private String convertToResultMap(List<String> upline, List<String> downline) {
         String uplineMark = String.join(" | ", upline);
         String downlineMark = String.join(" | ", downline);
 
