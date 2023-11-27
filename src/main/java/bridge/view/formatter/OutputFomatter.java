@@ -1,14 +1,12 @@
 package bridge.view.formatter;
 
+import bridge.domain.BridgeGame;
 import bridge.domain.GameSuccess;
 import bridge.domain.MovingResult;
 import bridge.domain.PlayerBridge;
-import bridge.domain.BridgeGame;
 import bridge.domain.Position;
-import bridge.domain.PositionMatch;
-import bridge.domain.Referee;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class OutputFomatter {
     public static final String BLANK = " ";
@@ -17,25 +15,26 @@ public class OutputFomatter {
         PlayerBridge playerBridge = bridgeGame.getPlayerBridge();
         List<MovingResult> movingResults = playerBridge.getBridge();
 
-        List<String> upline = new ArrayList<>();
-        List<String> downline = new ArrayList<>();
+        List<String> upline = getPositionMatches(movingResults, Position.UP);
+        List<String> downline = getPositionMatches(movingResults, Position.DOWN);
 
-        for (MovingResult movingResult : movingResults) {
-            Position position = movingResult.getPosition();
-            PositionMatch positionMatch = movingResult.getPositionMatch();
+        return convertResultMap(upline, downline);
+    }
 
-            String positionMatchMark = positionMatch.getMark();
-            if (position.equals(Position.UP)) {
-                upline.add(positionMatchMark);
-                downline.add(BLANK);
-            }
-            if (position.equals(Position.DOWN)) {
-                upline.add(BLANK);
-                downline.add(positionMatchMark);
-            }
-        }
-        return "[ " + String.join(" | ", upline) + " ]" + System.lineSeparator()
-                + "[ " + String.join(" | ", downline) + " ]";
+    private List<String> getPositionMatches(List<MovingResult> movingResults, Position position) {
+        return movingResults.stream()
+                .filter(movingResult -> movingResult.getPosition() == position)
+                .map(movingResult -> movingResult.getPositionMatch().getMark())
+                .collect(Collectors.toList());
+    }
+
+    private String convertResultMap(List<String> upline, List<String> downline) {
+        String uplineMark = String.join(" | ", upline);
+        String downlineMark = String.join(" | ", downline);
+
+        return String.format("[ %s ]", uplineMark)
+                + System.lineSeparator()
+                + String.format("[ %s ]", downlineMark);
     }
 
     public String toSuccessResult(BridgeGame bridgeGame) {
@@ -43,7 +42,7 @@ public class OutputFomatter {
         return successResult.getMessage();
     }
 
-    public int toTotalTryCount(Referee referee) {
-        return referee.getGameCount();
+    public int toTotalTryCount(BridgeGame bridgeGame) {
+        return bridgeGame.getGameCount();
     }
 }

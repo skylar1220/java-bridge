@@ -1,6 +1,7 @@
 package bridge.domain;
 
 public class GameCount {
+    public static final int DEFAULT_GAME_COUNT = 1;
     private int gameCount;
 
     public GameCount(int gameCount) {
@@ -8,7 +9,7 @@ public class GameCount {
     }
 
     public static GameCount init() {
-        return new GameCount(1);
+        return new GameCount(DEFAULT_GAME_COUNT);
     }
 
     public void increase() {

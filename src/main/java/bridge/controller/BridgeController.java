@@ -4,9 +4,8 @@ import bridge.domain.AnswerBridge;
 import bridge.domain.BridegeSize;
 import bridge.domain.BridgeGame;
 import bridge.domain.BridgeMaker;
-import bridge.domain.BridgeNumberGenerator;
+import bridge.BridgeNumberGenerator;
 import bridge.domain.Position;
-import bridge.domain.Referee;
 import bridge.view.InputView;
 import bridge.view.OutputView;
 import java.util.function.Supplier;
@@ -24,28 +23,45 @@ public class BridgeController {
 
     public void run() {
         showStart();
-        BridegeSize bridgeSize = readWithRetry(inputView::readBridgeSize);
-        BridgeMaker bridgeMaker = new BridgeMaker(bridgeNumberGenerator);
-        AnswerBridge answerBridge = AnswerBridge.from(bridgeMaker.makeBridge(bridgeSize.getBridgeSize()));
+        BridegeSize bridgeSize = getBridgeSize();
+        AnswerBridge answerBridge = generateAnswerBridge(bridgeSize);
         BridgeGame bridgeGame = BridgeGame.initGame(answerBridge);
-        Referee referee = Referee.init(bridgeGame);
-        while (referee.canPlay()) {
-            playRound(bridgeGame);
-            RetryOption retryOption = readWithRetry(inputView::readGameCommand);
-            referee.applyRetry(retryOption);
-        }
-        outputView.printResult(bridgeGame, referee);
+        playGame(bridgeGame);
+        outputView.printResult(bridgeGame);
     }
 
     private void showStart() {
         outputView.printStart();
     }
 
+    private BridegeSize getBridgeSize() {
+        return readWithRetry(inputView::readBridgeSize);
+    }
+
+    private AnswerBridge generateAnswerBridge(BridegeSize bridgeSize) {
+        BridgeMaker bridgeMaker = new BridgeMaker(bridgeNumberGenerator);
+        return AnswerBridge.from(bridgeMaker.makeBridge(bridgeSize.getBridgeSize()));
+    }
+
+    private void playGame(BridgeGame bridgeGame) {
+        while (bridgeGame.canPlayGame()) {
+            playRound(bridgeGame);
+            applyRetry(bridgeGame);
+        }
+    }
+
     private void playRound(BridgeGame bridgeGame) {
-        while (bridgeGame.hasRightMovement() && bridgeGame.canPlayGame()) {
+        while (bridgeGame.canPlayRound()) {
             Position inpuPosition = readWithRetry(inputView::readMoving);
             bridgeGame.move(inpuPosition);
             outputView.printMap(bridgeGame);
+        }
+    }
+
+    private void applyRetry(BridgeGame bridgeGame) {
+        if (!bridgeGame.isGameSuccess()) {
+            RetryOption retryOption = readWithRetry(inputView::readGameCommand);
+            bridgeGame.applyRetry(retryOption);
         }
     }
 

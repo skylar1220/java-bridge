@@ -1,21 +1,29 @@
 package bridge.domain;
 
+import bridge.controller.RetryOption;
+
 /**
  * 다리 건너기 게임을 관리하는 클래스
  */
 public class BridgeGame {
 
     private final AnswerBridge answerBridge;
-    private final PlayerBridge playerBridge;
+    private PlayerBridge playerBridge;
+    private boolean endGame;
+    private final GameCount gameCount;
 
-    public BridgeGame(AnswerBridge answerBridge, PlayerBridge playerBridge) {
+    public BridgeGame(AnswerBridge answerBridge, PlayerBridge playerBridge, boolean endGame, GameCount gameCount) {
         this.answerBridge = answerBridge;
         this.playerBridge = playerBridge;
+        this.endGame = endGame;
+        this.gameCount = gameCount;
     }
 
-    public static BridgeGame initGame(AnswerBridge answerBridge) {
+    public static BridgeGame initGame(AnswerBridge answerBridge) { // 여기 분리
         PlayerBridge playerBridge = PlayerBridge.init();
-        return new BridgeGame(answerBridge, playerBridge);
+        boolean isSuccess = false;
+        GameCount gameCount = GameCount.init();
+        return new BridgeGame(answerBridge, playerBridge, isSuccess, gameCount);
     }
 
     /**
@@ -25,7 +33,7 @@ public class BridgeGame {
      */
     public void move(Position inpuPosition) {
         playerBridge.applyMovement(answerBridge, inpuPosition);
-//        playerBridge.move(inpuPosition);
+        applySuccessCecking();
     }
 
     /**
@@ -34,17 +42,46 @@ public class BridgeGame {
      * 재시작을 위해 필요한 메서드의 반환 타입(return type), 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
      */
     public void retry() {
+        playerBridge = PlayerBridge.init();
     }
 
-    public boolean hasRightMovement() {
+    private void applySuccessCecking() {
+        if (isGameSuccess()) {
+            endGame = true;
+        }
+    }
+
+    public void applyRetry(RetryOption retryOption) {
+        if (retryOption.isRetry()) {
+            gameCount.increase();
+            retry();
+        }
+        if (retryOption.isQuit()) {
+            endGame = true;
+        }
+    }
+
+    public boolean canPlayGame() {
+        return !endGame;
+    }
+
+    public boolean canPlayRound() {
+        return !reachBridgeSize() && hasRightMovement();
+    }
+
+    public boolean isGameSuccess() {
+        return reachBridgeSize() && hasRightMovement();
+    }
+
+    private boolean reachBridgeSize() {
+        return playerBridge.isSameSize(answerBridge);
+    }
+
+    private boolean hasRightMovement() {
         if (playerBridge.isStart()) {
             return true;
         }
         return !playerBridge.hasFailMovement(answerBridge);
-    }
-
-    public boolean canPlayGame() {
-        return !playerBridge.isSameSize(answerBridge);
     }
 
     public GameSuccess getSuccessResult() {
@@ -54,5 +91,9 @@ public class BridgeGame {
 
     public PlayerBridge getPlayerBridge() {
         return playerBridge;
+    }
+
+    public int getGameCount() {
+        return gameCount.getGameCount();
     }
 }

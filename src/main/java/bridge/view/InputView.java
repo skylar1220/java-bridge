@@ -41,7 +41,6 @@ public class InputView {
         printer.printLine("게임을 다시 시도할지 여부를 입력해주세요. (재시도: R, 종료: Q)");
         String retry = reader.readLine();
         validator.validateRetryOption(retry, "재시도 여부");
-        RetryOption retryOption = RetryOption.from(retry);
-        return retryOption;
+        return RetryOption.from(retry);
     }
 }

@@ -1,7 +1,6 @@
 package bridge.view;
 
 import bridge.domain.BridgeGame;
-import bridge.domain.Referee;
 import bridge.view.formatter.OutputFomatter;
 import bridge.view.printer.Printer;
 
@@ -24,10 +23,10 @@ public class OutputView {
         printer.printLine(map);
     }
 
-    public void printResult(BridgeGame bridgeGame, Referee referee) {
+    public void printResult(BridgeGame bridgeGame) {
         printFinalMap(bridgeGame);
         printSuccessResult(bridgeGame);
-        printTotalTryCount(referee);
+        printTotalTryCount(bridgeGame);
     }
 
     private void printFinalMap(BridgeGame bridgeGame) {
@@ -40,7 +39,7 @@ public class OutputView {
         printer.printLine("게임 성공 여부: %s", successResult);
     }
 
-    private void printTotalTryCount(Referee referee) {
+    private void printTotalTryCount(BridgeGame referee) {
         int totalTryCount = formatter.toTotalTryCount(referee);
         printer.printLine("총 시도한 횟수: %d", totalTryCount);
     }

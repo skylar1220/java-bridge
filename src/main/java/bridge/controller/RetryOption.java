@@ -19,4 +19,12 @@ public enum RetryOption {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("재시도 여부는 R, Q로 입력해야합니다."));
     }
+
+    public boolean isRetry() {
+        return this == RETRY;
+    }
+
+    public boolean isQuit() {
+        return this == QUIT;
+    }
 }

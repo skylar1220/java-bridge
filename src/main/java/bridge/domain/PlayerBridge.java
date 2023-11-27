@@ -19,12 +19,9 @@ public class PlayerBridge {
     }
 
     public void applyMovement(AnswerBridge answerBridge, Position inpuPosition) {
-        PositionMatch positionMatch = answerBridge.match(bridge.size(), inpuPosition);
+        int positionIndex = bridge.size();
+        PositionMatch positionMatch = answerBridge.match(positionIndex, inpuPosition);
         bridge.add(MovingResult.of(inpuPosition, positionMatch));
-    }
-
-    public List<MovingResult> getBridge() {
-        return bridge;
     }
 
     public boolean hasFailMovement(AnswerBridge answerBridge) {
@@ -34,5 +31,9 @@ public class PlayerBridge {
 
     public boolean isSameSize(AnswerBridge answerBridge) {
         return answerBridge.isSameSize(bridge.size());
+    }
+
+    public List<MovingResult> getBridge() {
+        return bridge;
     }
 }
