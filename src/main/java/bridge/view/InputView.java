@@ -1,6 +1,6 @@
 package bridge.view;
 
-import bridge.controller.RetryOption;
+import bridge.domain.RetryOption;
 import bridge.domain.BridegeSize;
 import bridge.domain.Position;
 import bridge.util.converter.Converter;
@@ -34,7 +34,7 @@ public class InputView {
         printer.printLine("이동할 칸을 선택해주세요. (위: U, 아래: D)");
         String moving = reader.readLine();
         validator.validateMoving(moving, "이동할 칸");
-        return Position.fromPositionName(moving);
+        return Position.fromUserInput(moving);
     }
 
     public RetryOption readGameCommand() {

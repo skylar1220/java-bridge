@@ -1,12 +1,13 @@
 package bridge.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class AnswerBridge {
     private final List<Position> bridge;
 
-    public AnswerBridge(List<Position> positions) {
+    private AnswerBridge(List<Position> positions) {
         this.bridge = positions;
     }
 
@@ -14,9 +15,13 @@ public class AnswerBridge {
         return new AnswerBridge(convertToBridge(positions));
     }
 
+    public static AnswerBridge fromEmpty() {
+        return new AnswerBridge(new ArrayList<>());
+    }
+
     private static List<Position> convertToBridge(List<String> positions) {
         return positions.stream()
-                .map(Position::fromPositionName)
+                .map(Position::fromUserInput)
                 .collect(Collectors.toList());
     }
 
@@ -28,5 +33,9 @@ public class AnswerBridge {
 
     public boolean isSameSize(int size) {
         return bridge.size() == size;
+    }
+
+    public List<Position> getBridge() {
+        return bridge;
     }
 }

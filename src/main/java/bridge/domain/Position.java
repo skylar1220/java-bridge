@@ -22,7 +22,7 @@ public enum Position {
                         String.format("이동 위치에 적용할 숫자는 %d, %d 중에 하나여야합니다.", UP.number, DOWN.number)));
     }
 
-    public static Position fromPositionName(String positionName) {
+    public static Position fromUserInput(String positionName) {
         return Arrays.stream(values())
                 .filter(position -> position.positionName.equals(positionName))
                 .findFirst()

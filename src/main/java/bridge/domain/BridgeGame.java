@@ -1,7 +1,5 @@
 package bridge.domain;
 
-import bridge.controller.RetryOption;
-
 /**
  * 다리 건너기 게임을 관리하는 클래스
  */
@@ -23,6 +21,18 @@ public class BridgeGame {
         PlayerBridge playerBridge = PlayerBridge.init();
         boolean isSuccess = false;
         GameCount gameCount = GameCount.init();
+        return new BridgeGame(answerBridge, playerBridge, isSuccess, gameCount);
+    }
+
+    public static BridgeGame of(AnswerBridge answerBridge, PlayerBridge playerBridge) {
+        boolean isSuccess = false;
+        GameCount gameCount = GameCount.init();
+        return new BridgeGame(answerBridge, playerBridge, isSuccess, gameCount);
+    }
+
+    public static BridgeGame of(PlayerBridge playerBridge, GameCount gameCount) {
+        AnswerBridge answerBridge = AnswerBridge.fromEmpty();
+        boolean isSuccess = false;
         return new BridgeGame(answerBridge, playerBridge, isSuccess, gameCount);
     }
 
@@ -95,5 +105,9 @@ public class BridgeGame {
 
     public int getGameCount() {
         return gameCount.getGameCount();
+    }
+
+    public boolean isEndGame() {
+        return endGame;
     }
 }

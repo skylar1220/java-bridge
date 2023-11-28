@@ -1,5 +1,7 @@
 package bridge.domain;
 
+import java.util.Objects;
+
 public class MovingResult {
     private final Position position;
     private final PositionMatch positionMatch;
@@ -23,5 +25,22 @@ public class MovingResult {
 
     public PositionMatch getPositionMatch() {
         return positionMatch;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        MovingResult that = (MovingResult) o;
+        return position == that.position && positionMatch == that.positionMatch;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(position, positionMatch);
     }
 }

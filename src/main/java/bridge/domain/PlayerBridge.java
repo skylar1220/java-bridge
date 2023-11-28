@@ -14,6 +14,10 @@ public class PlayerBridge {
         return new PlayerBridge(new ArrayList<>());
     }
 
+    public static PlayerBridge from(List<MovingResult> bridge) {
+        return new PlayerBridge(new ArrayList<>(bridge));
+    }
+
     public boolean isStart() {
         return bridge.isEmpty();
     }

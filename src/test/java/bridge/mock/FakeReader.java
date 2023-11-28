@@ -1,4 +1,4 @@
-package mock;
+package bridge.mock;
 
 
 import bridge.view.reader.Reader;

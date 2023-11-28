@@ -6,6 +6,7 @@ import bridge.domain.BridgeGame;
 import bridge.domain.BridgeMaker;
 import bridge.BridgeNumberGenerator;
 import bridge.domain.Position;
+import bridge.domain.RetryOption;
 import bridge.view.InputView;
 import bridge.view.OutputView;
 import java.util.function.Supplier;
